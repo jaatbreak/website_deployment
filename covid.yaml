@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: covid-demo
+  labels:
+    app: test
+spec:
+  replicas: 1
+  selector:
+     matchLabels:
+       app: test
+  template:
+    metadata:
+      labels:
+        app: test
+    spec:
+      containers:
+      - name: covid-pod
+        image: amansingh12/covid-webpage:latest
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hack-service
+spec:
+  selector:
+    app: test
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP 

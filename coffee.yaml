@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata: 
-  name: hack-web
+  name: coffee-web
   labels:
     app: test
 spec:
-  replicas: 3
+  replicas: 1 
   selector:
      matchLabels:
        app: test
@@ -15,14 +15,14 @@ spec:
         app: test
     spec:
       containers:
-      - name: hack-web
-        image: 926156776701.dkr.ecr.ap-south-1.amazonaws.com/private:latest
+      - name: coffee-web
+        image: amansingh12/coffee_web:latest
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: hack-service
+  name: coffee-service
 spec:
   selector:
     app: test
@@ -30,4 +30,4 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 80
-  type: NodePort  
+  type: ClusterIP 
