@@ -14,24 +14,5 @@ spec:
             name: shopping-service
             port:
               number: 80
-  - host: "jaatbreak.com"
-    http:
-      paths:
-      - pathType: Prefix
-        path: "/coffee"
-        backend:
-          service:
-            name: coffee-service
-            port:
-              number: 80
-  - host: "jaatbreak.com"
-    http:
-      paths:
-      - pathType: Prefix
-        path: "/hack"
-        backend:
-          service:
-            name: hack-service
-            port:
-              number: 80
+  
 
