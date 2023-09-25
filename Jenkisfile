@@ -1,0 +1,47 @@
+pipeline{
+    agent any
+    environment {
+      git_secret="a9b0df0b-b46a-49aa-95d2-0aa9ebf133d6"
+      DOCKER_CREDENTIALS="docker_secret"
+      IMAGE_NAME="web"
+      DOCKER_TAG="test"
+      git_url= "https://github.com/jaatbreak/website_deployment.git"
+      DOCKER_REPO= "amansingh12/private"
+      DOCKER_USER="amansingh12"
+    }
+    stages{
+        stage("scm"){
+            steps{
+                git branch: 'main', credentialsId:"${git_secret}", url: "${git_url}"
+            }
+        }
+        stage("Build"){
+            steps{
+                sh 'docker build -t $IMAGE_NAME:${DOCKER_TAG} .'
+                sh "docker tag $IMAGE_NAME:$DOCKER_TAG  $DOCKER_REPO:$DOCKER_TAG"
+            }
+        }
+        stage("Push"){
+            steps{
+              withCredentials([string(credentialsId: 'docker_secret', variable: 'docker_var')]){
+                  sh 'docker login -u $DOCKER_USER -p $docker_var'
+                 sh 'docker push  $DOCKER_REPO:$DOCKER_TAG'
+                }
+            }
+       }
+       stage('User Approval') {
+            steps {
+               input(id: 'userInput', message: 'Do you want to proceed?', parameters: [
+                 [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Approve or disapprove', name: 'APPROVE']
+                 ])
+            }
+        }
+        stage("Deploy Application"){
+            steps{
+                sh "kubectl create deployment webserver --image=$DOCKER_REPO:$DOCKER_TAG"
+                sh 'kubectl expose deployment webserver --type=NodePort --port=80'
+                sh "curl ifconfig.me."
+            }
+        }
+    }
+}

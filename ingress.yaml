@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: "www.jaatbreak.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: shopping-service
+            port:
+              number: 80
+  - host: "www.jaatbreak.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/covid"
+        backend:
+          service:
+            name: covid-service
+            port:
+              number: 80
+

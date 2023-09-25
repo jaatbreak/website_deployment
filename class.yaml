@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata: 
-  name: shopping-web
+  name: covid
   labels:
     app: test
 spec:
@@ -15,14 +15,14 @@ spec:
         app: test
     spec:
       containers:
-      - name: shopping
-        image: amansingh12/shopping_page:latest
+      - name: covid
+        image: amansingh12/covid-webpage:latest
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: shopping-service
+  name: covid-service
 spec:
   selector:
     app: test
